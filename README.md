@@ -32,7 +32,7 @@ Application designed to pass information and images from one person to another.
 
 ### Features:
 1-User 
-- [ ] Register
++ Register
 - [ ] Login
 - [ ] Logout
 - [ ] Update profile
