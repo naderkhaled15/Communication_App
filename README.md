@@ -33,22 +33,22 @@ Application designed to pass information and images from one person to another.
 ### Features:
 1-User 
 + Register
-- [ ] Login
-- [ ] Logout
-- [ ] Update profile
++ Login
++  Logout
++  Update profile
 
 2-Post
-- [ ] Create post 
-- [ ] Update Posts
-- [ ] Delete Posts
++  Create post
++  Update Posts
++  Delete Posts
 
 2-Like
-- [ ] Like Post
-- [ ] DisLike Post      
++ Like Post
++  DisLike Post      
 
 2-Comment
-- [ ] Create
-- [ ] Delete
++  Create
++  Delete
 
 
 
