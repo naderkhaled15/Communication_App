@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    // Required in Vue projects
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    // used true with strict mode to prevent using any type
+    "noImplicitAny": true,
+    "noEmit": false,
+    // this aligns with Vue's browser support
+    "target": "ES6",
+    // this enables stricter inference for data properties on `this`
+    "strict": true,
+    // if using webpack 2+ or rollup, to leverage tree shaking:
+    "module": "ES6",
+    "moduleResolution": "node",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "ES6", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "checkJs": false,
+    "skipLibCheck": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "importHelpers": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "experimentalDecorators": true,
+    "types": ["vite/client"],
+    "noEmitOnError": true,
+    "outDir": "./dist"
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
