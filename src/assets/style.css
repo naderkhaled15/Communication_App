@@ -208,7 +208,7 @@ body {
       -ms-flex-align: center;
           align-items: center;
 }
-.modal-mask .model-container {
+.modal-mask .modal-container {
   width: 50vw;
   background-color: rgb(255, 255, 255);
   padding: 1rem;
@@ -264,4 +264,54 @@ body {
 .modal-mask .create-post:hover {
   background-color: rgb(135, 213, 239);
   font-weight: bold;
+}
+
+.commetns-container ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.commetns-container ul li {
+  background-color: silver;
+  padding: 5px;
+  margin: 10px;
+  border-radius: 9px;
+}
+
+.comment-container {
+  overflow-y: auto;
+  max-height: 60vh;
+}
+.comment-container .comment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.comment-container .comment-list li {
+  background-color: rgba(192, 192, 192, 0.207);
+  padding: 5px;
+  margin: 10px;
+  border-radius: 10px;
+}
+.comment-container .comment-list li div {
+  padding: 4px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+.comment-container .comment-list li div p {
+  padding: 0;
+  margin: 0;
+  font-weight: bold;
+}
+.comment-container .comment-list li p {
+  padding: 4px 8px;
+  margin: 0;
 }

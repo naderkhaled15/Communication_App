@@ -1,12 +1,37 @@
 <script setup lang="ts">
-import { inject } from "vue";
-const posts = inject("allPosts");
-console.log(posts);
+import { storeToRefs } from "pinia";
+import { getPosts } from "../stores/getPosts";
+import { getComments } from "../stores/getComments";
+import { inject, onMounted, ref } from "vue";
+import ShowCommentModal from "../Modals/ShowCommentModal.vue";
+
+// pinia store
+const postsStore = getPosts();
+const commentStore = getComments();
+const { allPosts } = storeToRefs(postsStore);
+const { mainPostId } = storeToRefs(commentStore);
+// const getAllComments = commentStore.getAllComments;
+
+let showComment = ref(false);
+
+// get post id
+const updatePostId = (e: any) => {
+  mainPostId.value = e.target.id;
+  showComment.value = true;
+};
+
+const emitter: any = inject("emitter");
+onMounted(() => {
+  emitter.on("globalEmit", () => {
+    location.reload();
+  });
+});
 </script>
+
 <template>
   <div
     class="card my-5 shadow post-card"
-    v-for="post in posts"
+    v-for="post in allPosts"
     :key="post['id']"
   >
     <!-- post header -->
@@ -48,22 +73,11 @@ console.log(posts);
             />
           </svg>
         </button>
-        <button class="btn p-0 fw-bold">
+        <button class="btn p-0 fw-bold" @click="updatePostId" :id="post['id']">
           ({{ post["comments_count"] }}) comments
         </button>
-
-        <!-- list of -->
-        <!-- <ul
-          class="tags d-flex gap-3 m-0 p-0 mx-3 list-inline"
-          v-for="tag in post['tags']"
-          :key="tag['name']"
-          v-if="post['tags']"
-        >
-          <li>
-            <button>{{ tag }}</button>
-          </li>
-        </ul> -->
       </div>
     </div>
   </div>
+  <ShowCommentModal v-if="showComment" @closeModal="showComment = false" />
 </template>

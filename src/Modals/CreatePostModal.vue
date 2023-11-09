@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import axios from "../axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+
 defineProps({
   show: Boolean,
 });
 
-const emit = defineEmits(["clear", "update"]);
+const emit = defineEmits(["clear"]);
+const emitter: any = inject("emitter");
+const fireEmit = () => {
+  emitter.emit("globalEmit");
+};
 
 let title = ref("");
 let body = ref("");
@@ -44,7 +49,7 @@ const createPost = async () => {
       // close modal
       emit("clear");
       // update posts
-      emit("update");
+      fireEmit();
       //reset values
       title.value = body.value = image.value = "";
       // show notifications
@@ -72,7 +77,7 @@ const createPost = async () => {
 </script>
 <template>
   <div class="modal-mask" v-if="show">
-    <div class="model-container">
+    <div class="modal-container">
       <div class="modal-header">
         <h6 class="modal-header">new post</h6>
         <button

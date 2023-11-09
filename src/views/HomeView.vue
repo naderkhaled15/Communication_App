@@ -2,42 +2,36 @@
 import NavHeader from "../components/NavHeader.vue";
 import Post from "../components/Post.vue";
 import CreatePostModal from "../Modals/CreatePostModal.vue";
-import { onMounted, provide, ref } from "vue";
-import { usePosts } from "../stores/getPosts";
+import { onMounted, ref } from "vue";
+import { getPosts } from "../stores/getPosts";
 import "vue3-toastify/dist/index.css";
 
-const getPosts = usePosts();
+// pinia store
+const postsStore = getPosts();
+const getAllPosts = postsStore.getAllPosts;
+const increasePage = postsStore.increasePage;
+// show or hide add post modal
 let showModal = ref(false);
-let currentPage = 1;
 
-let updatePage = () => {
-  window.location.reload();
-};
-
+// check on mounted
 onMounted(() => {
   let token = localStorage.getItem("token");
   if (!token) {
-    getPosts.getAllPosts();
+    getAllPosts();
   } else {
-    getPosts.getAllPosts();
-    // getPosts.getAllPosts();
+    getAllPosts();
   }
 });
 
-//try scrolling
-window.addEventListener("scroll", function () {
-  const endOfPage =
-    this.window.innerHeight + this.window.scrollY >=
-    this.document.body.offsetHeight;
+document.addEventListener("scroll", () => {
+  const scrollableHeight =
+    document.documentElement.scrollHeight - window.innerHeight;
 
-  if (endOfPage) {
-    console.log("this is the end of page");
-    currentPage += 1;
-    getPosts.getAllPosts(currentPage);
+  if (window.scrollY >= scrollableHeight) {
+    // increase page includes getPosts func recall
+    increasePage();
   }
 });
-
-provide("allPosts", getPosts.allPosts);
 </script>
 
 <template>
@@ -47,10 +41,6 @@ provide("allPosts", getPosts.allPosts);
     <!-- posts -->
     <post />
     <!-- post modal -->
-    <create-post-modal
-      :show="showModal"
-      @clear="showModal = false"
-      @update="updatePage"
-    />
+    <create-post-modal :show="showModal" @clear="showModal = false" />
   </div>
 </template>

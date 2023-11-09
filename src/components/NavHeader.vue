@@ -1,17 +1,29 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import router from "../router";
 import { toast } from "vue3-toastify";
 
-let userInfo = ref(localStorage.getItem("user-info") || "{}");
-let userCard = JSON.parse(userInfo.value);
+let userCard = ref(JSON.parse(localStorage.getItem("user-info") || "{}"));
 
-let show = ref(localStorage.getItem("token"));
+let show = ref(userCard);
+
+onMounted(() => {
+  let token = localStorage.getItem("token");
+  if (token) {
+  } else {
+    show.value = false;
+  }
+});
+
+window.addEventListener("storage", function () {
+  show.value = false;
+});
 
 let logOut = () => {
   localStorage.clear();
   router.push({ name: "home" });
-  show.value = null;
+  show.value = false;
+  // toast func
   (function () {
     toast.error("Logged Out", {
       position: "bottom-right",
@@ -29,7 +41,8 @@ let logOut = () => {
       class="navbar navbar-expand-lg navbar-light bg-light px-2 py-2 rounded"
     >
       <div class="container">
-        <a class="navbar-brand fw-bold" href="#">comuapp</a>
+        <RouterLink class="navbar-brand fw-bold" to="/"> comuapp </RouterLink>
+        <!-- <a class="navbar-brand fw-bold" href="#">comuapp</a> -->
         <!-- menu button at sm screens -->
         <button
           class="navbar-toggler"
