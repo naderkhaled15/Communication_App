@@ -74,7 +74,7 @@ onMounted(() => {
           </svg>
         </button>
         <button class="btn p-0 fw-bold" @click="updatePostId" :id="post['id']">
-          ({{ post["comments_count"] }}) comment
+          ({{ post["comments_count"] }}) comments
         </button>
       </div>
     </div>
