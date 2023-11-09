@@ -229,6 +229,7 @@ body {
     border-color: #ff0000;
     padding: 5px 10px;
     font-size: 10px;
+    margin-left: auto;
 
     &:hover {
       font-weight: bold;
@@ -252,54 +253,62 @@ body {
   }
 }
 
-// comments container
+// post modal
+.modal-comment-container {
+  overflow-y: auto;
+  width: 70vw;
+  max-width: 80vw;
+  max-height: 900px;
+  border-radius: 9px;
+  overflow: hidden;
+  .footer-container {
+    .comment-container {
+      overflow-y: auto;
+      max-height: 60vh;
+      padding-bottom: 10px;
+      .comment-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
 
-// modal
-
-.commetns-container {
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    li {
-      background-color: silver;
-      padding: 5px;
-      margin: 10px;
-      border-radius: 9px;
+        li {
+          background-color: rgba(192, 192, 192, 0.207);
+          padding: 5px;
+          margin: 10px;
+          border-radius: 10px;
+          div {
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-start;
+            p {
+              padding: 0;
+              margin: 0;
+              font-weight: bold;
+            }
+          }
+          p {
+            padding: 4px 8px;
+            margin: 0;
+          }
+        }
+      }
     }
   }
 }
 
-// post modal
-.comment-container {
-  overflow-y: auto;
-  max-height: 60vh;
-  .comment-list {
-    list-style: none;
+// createing comments
+.form-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  input {
     margin: 0;
-    padding: 0;
-
-    li {
-      background-color: rgba(192, 192, 192, 0.207);
-      padding: 5px;
-      margin: 10px;
-      border-radius: 10px;
-      div {
-        padding: 4px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        justify-content: flex-start;
-        p {
-          padding: 0;
-          margin: 0;
-          font-weight: bold;
-        }
-      }
-      p {
-        padding: 4px 8px;
-        margin: 0;
-      }
-    }
+  }
+  button {
+    text-align: center;
+    padding: 9px 10px;
   }
 }

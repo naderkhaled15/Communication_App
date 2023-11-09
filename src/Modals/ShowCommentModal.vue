@@ -1,17 +1,32 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import CreateComment from "../components/CreateComment.vue";
+import { onMounted, ref } from "vue";
 import { getComments } from "../stores/getComments";
 import { storeToRefs } from "pinia";
+import { getPosts } from "../stores/getPosts";
 
+const postsStore = getPosts();
+const getAllPosts = postsStore.getAllPosts;
 const commentStore = getComments();
 const { allComments, postInfo } = storeToRefs(commentStore);
 const getAllComments = commentStore.getAllComments;
 const emit = defineEmits(["closeModal"]);
+const props = defineProps({ id: Number });
+
+let showComment = ref<Boolean>(localStorage.getItem("token") ? true : false);
+
+window.addEventListener("storage", function () {
+  showComment.value = false;
+});
+
+const callComments = async () => {
+  await getAllComments();
+  await getAllPosts();
+};
 
 onMounted(async () => {
   try {
     await getAllComments();
-    console.log(postInfo.value);
   } catch (e: any) {
     console.log(e.message);
   }
@@ -19,10 +34,23 @@ onMounted(async () => {
 </script>
 <template>
   <div class="modal-mask">
-    <div class="modal-container">
-      <!-- header container -->
-      <div class="modal-header">
-        <h6 class="modal-header">Comments</h6>
+    <div
+      class="card my-5 shadow post-card modal-comment-container"
+      v-for="post in postInfo"
+      :key="post['id']"
+    >
+      <!-- post header -->
+      <div class="card-header d-flex align-items-center gap-2">
+        <img
+          class="rounded-circle border border-dark"
+          :src="post['author']['profile_image']"
+          alt=""
+          width="40"
+          height="40"
+        />
+        <h6 class="user-name fw-bold">
+          {{ post["author"]["username"] }}
+        </h6>
         <button
           class="btn btn-outline-danger my-sm-0 close-modal"
           @click="$emit('closeModal')"
@@ -30,38 +58,19 @@ onMounted(async () => {
           &#9587;
         </button>
       </div>
-      <hr />
-      <!-- post card -->
-      <div
-        class="card my-5 shadow post-card"
-        v-for="post in postInfo"
-        :key="post['id']"
-      >
-        <!-- post header -->
-        <div class="card-header d-flex align-items-center gap-2">
-          <img
-            class="rounded-circle border border-dark"
-            :src="post['author']['profile_image']"
-            alt=""
-            width="40"
-            height="40"
-          />
-          <h6 class="user-name fw-bold">
-            {{ post["author"]["username"] }}
-          </h6>
-        </div>
-        <!-- post body -->
-        <div class="card-body">
-          <img :src="post['image']" alt="" class="w-100" />
-          <small class="text-small">{{ post["created_at"] }}</small>
-          <h5 class="card-title" v-if="post['title']">{{ post["title"] }}</h5>
-          <p class="card-text" v-if="post['body']">
-            {{ post["body"] }}
-          </p>
-        </div>
-        <!-- post footer -->
-        <div class="card-footer text-muted">
-          <div class="d-flex flex-row align-items-center">
+      <!-- post body -->
+      <div class="card-body">
+        <img :src="post['image']" alt="" class="w-100" />
+        <small class="text-small">{{ post["created_at"] }}</small>
+        <h5 class="card-title" v-if="post['title']">{{ post["title"] }}</h5>
+        <p class="card-text" v-if="post['body']">
+          {{ post["body"] }}
+        </p>
+      </div>
+      <!-- post footer -->
+      <div class="card-footer text-muted">
+        <div class="footer-container">
+          <div class="footer-list">
             <button class="btn">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -80,29 +89,36 @@ onMounted(async () => {
               ({{ post["comments_count"] }}) comments
             </button>
           </div>
+
+          <!-- comments -->
+          <div class="comment-container">
+            <ul
+              v-for="comment in allComments"
+              :key="comment['id']"
+              class="comment-list"
+            >
+              <li>
+                <div>
+                  <img
+                    class="rounded-circle border border-dark"
+                    :src="comment['author']['profile_image']"
+                    alt=""
+                    width="40"
+                    height="40"
+                  />
+                  <p>{{ comment["author"]["name"] }}</p>
+                </div>
+                <p>{{ comment["body"] }}</p>
+              </li>
+            </ul>
+          </div>
+          <!-- create comment -->
+          <CreateComment
+            v-if="showComment"
+            :postId="props.id"
+            @success="callComments"
+          />
         </div>
-      </div>
-      <!-- comments container -->
-      <div class="comment-container">
-        <ul
-          v-for="comment in allComments"
-          :key="comment['id']"
-          class="comment-list"
-        >
-          <li>
-            <div>
-              <img
-                class="rounded-circle border border-dark"
-                :src="comment['author']['profile_image']"
-                alt=""
-                width="40"
-                height="40"
-              />
-              <p>{{ comment["author"]["name"] }}</p>
-            </div>
-            <p>{{ comment["body"] }}</p>
-          </li>
-        </ul>
       </div>
     </div>
   </div>

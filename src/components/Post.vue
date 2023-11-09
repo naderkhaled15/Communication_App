@@ -10,6 +10,7 @@ const postsStore = getPosts();
 const commentStore = getComments();
 const { allPosts } = storeToRefs(postsStore);
 const { mainPostId } = storeToRefs(commentStore);
+let postId = ref();
 // const getAllComments = commentStore.getAllComments;
 
 let showComment = ref(false);
@@ -17,6 +18,7 @@ let showComment = ref(false);
 // get post id
 const updatePostId = (e: any) => {
   mainPostId.value = e.target.id;
+  postId.value = +e.target.id;
   showComment.value = true;
 };
 
@@ -79,5 +81,9 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <ShowCommentModal v-if="showComment" @closeModal="showComment = false" />
+  <ShowCommentModal
+    v-if="showComment"
+    @closeModal="showComment = false"
+    :id="postId"
+  />
 </template>
