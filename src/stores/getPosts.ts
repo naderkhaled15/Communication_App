@@ -14,12 +14,17 @@ export const getPosts = defineStore("posts", {
         );
         let posts: never[] = result.data.data;
         this.allPosts.push(...posts);
+        return this.allPosts;
       } catch (e: any) {
         console.error(e.message);
       }
     },
     increasePage() {
       this.currentPage++;
+      this.getAllPosts();
+    },
+    upToDate() {
+      this.allPosts = [];
       this.getAllPosts();
     },
   },

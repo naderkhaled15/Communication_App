@@ -4,6 +4,11 @@ import { onMounted, reactive, ref } from "vue";
 import router from "../router";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import { getPosts } from "../stores/getPosts";
+
+const postsStore = getPosts();
+
+const upToDate = postsStore.upToDate;
 
 let params = reactive({
   username: "",
@@ -34,7 +39,7 @@ let login = async () => {
     }
     params.username = params.password = "";
     router.push({ name: "home" });
-
+    upToDate();
     (function () {
       toast.success("Logged In successfully", {
         position: "bottom-right",

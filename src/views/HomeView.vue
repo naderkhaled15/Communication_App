@@ -2,26 +2,15 @@
 import NavHeader from "../components/NavHeader.vue";
 import Post from "../components/Post.vue";
 import CreatePostModal from "../Modals/CreatePostModal.vue";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { getPosts } from "../stores/getPosts";
 import "vue3-toastify/dist/index.css";
 
 // pinia store
 const postsStore = getPosts();
-const getAllPosts = postsStore.getAllPosts;
 const increasePage = postsStore.increasePage;
 // show or hide add post modal
 let showModal = ref(false);
-
-// check on mounted
-onMounted(() => {
-  let token = localStorage.getItem("token");
-  if (!token) {
-    getAllPosts();
-  } else {
-    getAllPosts();
-  }
-});
 
 document.addEventListener("scroll", () => {
   const scrollableHeight =
@@ -41,6 +30,6 @@ document.addEventListener("scroll", () => {
     <!-- posts -->
     <post />
     <!-- post modal -->
-    <create-post-modal :show="showModal" @clear="showModal = false" />
+    <create-post-modal :show="showModal" @close="showModal = false" />
   </div>
 </template>

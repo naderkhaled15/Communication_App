@@ -4,30 +4,68 @@ import { getPosts } from "../stores/getPosts";
 import { getComments } from "../stores/getComments";
 import { inject, onMounted, ref } from "vue";
 import ShowCommentModal from "../Modals/ShowCommentModal.vue";
+import EditPostModal from "../Modals/EditPostModal.vue";
+import axios from "../axios";
 
 // pinia store
 const postsStore = getPosts();
 const commentStore = getComments();
 const { allPosts } = storeToRefs(postsStore);
 const { mainPostId } = storeToRefs(commentStore);
+const getAllPosts = postsStore.getAllPosts;
+const upToDate = postsStore.upToDate;
+const emit = defineEmits(["shouldUpdate"]);
 let postId = ref();
-// const getAllComments = commentStore.getAllComments;
+const postObj = ref();
+const userInfo = JSON.parse(localStorage.getItem("user-info")!);
+const token = JSON.parse(localStorage.getItem("token")!);
+
+// watch local storage
+window.addEventListener("storage", function () {
+  this.location.reload();
+});
+
+// check on mounted
+onMounted(() => {
+  getAllPosts();
+});
 
 let showComment = ref(false);
+let showEdit = ref(false);
 
-// get post id
-const updatePostId = (e: any) => {
-  mainPostId.value = e.target.id;
-  postId.value = +e.target.id;
+// comment post id
+const updatePostId = (postid: number) => {
+  mainPostId.value = postid;
+  postId.value = postid;
   showComment.value = true;
 };
 
+// edited post id
+const editPostId = (postObject: object) => {
+  showEdit.value = true;
+  postObj.value = postObject;
+};
+
 const emitter: any = inject("emitter");
-onMounted(() => {
-  emitter.on("globalEmit", () => {
-    location.reload();
-  });
+
+emitter.on("created", () => {
+  upToDate();
 });
+const checkAppearance = (userId: number) => {
+  let appear = userInfo?.id == userId;
+  return appear;
+};
+
+// delete post
+const deletePost = async (postId: number) => {
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+
+  let result = await axios.delete(`/posts/${postId}`, { headers });
+  upToDate();
+};
 </script>
 
 <template>
@@ -48,7 +86,16 @@ onMounted(() => {
       <h6 class="user-name fw-bold">
         {{ post["author"]["username"] }}
       </h6>
+      <button
+        v-if="checkAppearance(post['author']['id'])"
+        type="button"
+        class="btn btn-outline-danger btn-sm btn-delete"
+        @click="deletePost(post['id'])"
+      >
+        delete
+      </button>
     </div>
+
     <!-- post body -->
     <div class="card-body">
       <img :src="post['image']" alt="" class="w-100" />
@@ -75,15 +122,35 @@ onMounted(() => {
             />
           </svg>
         </button>
-        <button class="btn p-0 fw-bold" @click="updatePostId" :id="post['id']">
+        <button
+          class="btn p-0 fw-bold"
+          @click="updatePostId(post['id'])"
+          :id="post['id']"
+        >
           ({{ post["comments_count"] }}) comments
         </button>
       </div>
+      <button
+        v-if="checkAppearance(post['author']['id'])"
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        @click="editPostId(post)"
+      >
+        edit
+      </button>
     </div>
   </div>
+  <!-- edit post model -->
+  <edit-post-modal
+    v-if="showEdit"
+    :show="showEdit"
+    @close="showEdit = false"
+    :post="postObj"
+  />
   <ShowCommentModal
     v-if="showComment"
     @closeModal="showComment = false"
+    @comment-done="upToDate"
     :id="postId"
   />
 </template>

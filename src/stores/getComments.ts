@@ -12,7 +12,7 @@ export const getComments = defineStore("comments", {
       this.postInfo = [];
       try {
         let result = await axios.get("/posts/" + this.mainPostId);
-        let userData: never[] = result.data.data;
+        let userData: string[] = result.data.data;
         this.postInfo.push(userData);
         let comments: never[] = result.data.data.comments;
         this.allComments.push(...comments);

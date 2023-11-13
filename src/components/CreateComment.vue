@@ -8,7 +8,7 @@ const props = defineProps({ postId: Number });
 const emit = defineEmits(["success"]);
 
 const addComment = async () => {
-  let token = JSON.parse(localStorage.getItem("token"));
+  let token = JSON.parse(localStorage.getItem("token") || "{}");
 
   try {
     if (comment.value) {

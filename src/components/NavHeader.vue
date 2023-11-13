@@ -23,6 +23,7 @@ let logOut = () => {
   localStorage.clear();
   router.push({ name: "home" });
   show.value = false;
+  location.reload();
   // toast func
   (function () {
     toast.error("Logged Out", {
@@ -59,10 +60,12 @@ let logOut = () => {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">home</a>
+              <RouterLink class="nav-link" to="/"> home </RouterLink>
+              <!-- <a class="nav-link" href="#">home</a> -->
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">profile</a>
+              <RouterLink class="nav-link" to="/"> profile </RouterLink>
+              <!-- <a class="nav-link" href="#">profile</a> -->
             </li>
           </ul>
           <form class="form-inline my-2 my-lg-0" v-if="!show">

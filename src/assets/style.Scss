@@ -255,12 +255,23 @@ body {
 
 // post modal
 .modal-comment-container {
-  overflow-y: auto;
+  overflow-y: scroll;
   width: 70vw;
   max-width: 80vw;
   max-height: 900px;
   border-radius: 9px;
   overflow: hidden;
+
+  .card-body {
+    overflow: auto;
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    .post-img {
+      max-width: 100%;
+    }
+  }
+
   .footer-container {
     .comment-container {
       overflow-y: auto;
@@ -310,5 +321,24 @@ body {
   button {
     text-align: center;
     padding: 9px 10px;
+  }
+}
+
+// posts footer
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  .user-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+  }
+}
+
+// posts header
+.card-header {
+  .btn-delete {
+    margin-left: auto;
   }
 }

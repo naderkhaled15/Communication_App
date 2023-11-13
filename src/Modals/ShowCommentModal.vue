@@ -10,7 +10,7 @@ const getAllPosts = postsStore.getAllPosts;
 const commentStore = getComments();
 const { allComments, postInfo } = storeToRefs(commentStore);
 const getAllComments = commentStore.getAllComments;
-const emit = defineEmits(["closeModal"]);
+const emit = defineEmits(["closeModal", "commentDone"]);
 const props = defineProps({ id: Number });
 
 let showComment = ref<Boolean>(localStorage.getItem("token") ? true : false);
@@ -22,6 +22,7 @@ window.addEventListener("storage", function () {
 const callComments = async () => {
   await getAllComments();
   await getAllPosts();
+  emit("commentDone");
 };
 
 onMounted(async () => {
@@ -60,7 +61,7 @@ onMounted(async () => {
       </div>
       <!-- post body -->
       <div class="card-body">
-        <img :src="post['image']" alt="" class="w-100" />
+        <img :src="post['image']" alt="" class="post-img" />
         <small class="text-small">{{ post["created_at"] }}</small>
         <h5 class="card-title" v-if="post['title']">{{ post["title"] }}</h5>
         <p class="card-text" v-if="post['body']">

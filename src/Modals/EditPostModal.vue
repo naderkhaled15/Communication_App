@@ -1,72 +1,80 @@
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { ref } from "vue";
 import axios from "../axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import { getPosts } from "../stores/getPosts";
 
-defineProps({
-  show: Boolean,
+const postsStore = getPosts();
+const upToDate = postsStore.upToDate;
+
+const props = defineProps({
+  show: {
+    type: Boolean,
+  },
+  post: {
+    type: Object,
+    required: true,
+  },
 });
 
 const emit = defineEmits(["close"]);
-const emitter: any = inject("emitter");
-const fireEmit = () => {
-  emitter.emit("created");
-};
 
-let title = ref("");
-let body = ref("");
-let image = ref("");
+let title = ref(props["post"]["title"]);
+let body = ref(props["post"]["body"]);
+let image = ref(props["post"]["image"]);
 
 // uploading image
-const uploadfile = (event: any) => {
-  image.value = event.target.files[0];
+const uploadfile = (e: any) => {
+  console.log(e.target);
+  image.value = e.target.files[0];
 };
 
 // creating post
-const createPost = async () => {
+const editPost = async () => {
   try {
-    const token = JSON.parse(localStorage.getItem("token") || "{}");
-
+    const token = JSON.parse(localStorage.getItem("token")!);
     // 1-create form data
     const formData = new FormData();
     if (title.value) {
       formData.append("title", title.value);
     }
-    formData.append("body", body.value);
+    if (body.value) {
+      formData.append("body", body.value);
+    }
     if (image.value) {
       formData.append("image", image.value);
     }
+    formData.append("_method", "put");
     // 2-creating header
     const headers = {
-      "Content-Type": "multipart/form-data;",
+      "Content-Type": "multipart/form-data; ",
       Authorization: `Bearer ${token}`,
     };
     // 3-make request
-    let result = await axios.post("/posts", formData, { headers });
-    // check result status
-    if (result.status == 201) {
-      // close modal
-      emit("close");
+    let result = await axios.post("/posts/" + props["post"]["id"], formData, {
+      headers,
+    });
 
-      // update posts
-      fireEmit();
-      //reset values
-      title.value = body.value = image.value = "";
-      // show notifications
+    // check result status
+    if (result.status == 200) {
       (function () {
-        toast.success("Post created successfully", {
+        toast.success("Post updated successfully", {
           position: "bottom-right",
           autoClose: 1000,
           closeButton: false,
           pauseOnHover: false,
         });
       })();
+      // close modal
+      emit("close");
+      // update posts
+      upToDate();
     }
   } catch (e: any) {
-    const message = e.response.data.message;
+    let error: string = e.response.data.error_message;
     (function () {
-      toast.error(message, {
+      toast.error(error, {
         position: "bottom-right",
         autoClose: 1000,
         closeButton: false,
@@ -77,10 +85,10 @@ const createPost = async () => {
 };
 </script>
 <template>
-  <div class="modal-mask" v-if="show">
+  <div class="modal-mask" v-if="props.show">
     <div class="modal-container">
       <div class="modal-header">
-        <h6 class="modal-header">new post</h6>
+        <h6 class="modal-header">edit post</h6>
         <button
           class="btn btn-outline-danger my-sm-0 close-modal"
           @click="$emit('close')"
@@ -99,7 +107,7 @@ const createPost = async () => {
       <label for="img">image</label>
       <input type="file" id="img" @change="uploadfile" />
 
-      <button class="create-post" @click="createPost">create</button>
+      <button class="create-post" @click="editPost">Edit</button>
     </div>
   </div>
 </template>

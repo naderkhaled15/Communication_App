@@ -268,12 +268,26 @@ body {
 }
 
 .modal-comment-container {
-  overflow-y: auto;
+  overflow-y: scroll;
   width: 70vw;
   max-width: 80vw;
   max-height: 900px;
   border-radius: 9px;
   overflow: hidden;
+}
+.modal-comment-container .card-body {
+  overflow: auto;
+  max-height: 700px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.modal-comment-container .card-body .post-img {
+  max-width: 100%;
 }
 .modal-comment-container .footer-container .comment-container {
   overflow-y: auto;
@@ -332,4 +346,29 @@ body {
 .form-box button {
   text-align: center;
   padding: 9px 10px;
+}
+
+.card-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.card-footer .user-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 9px;
+}
+
+.card-header .btn-delete {
+  margin-left: auto;
 }
