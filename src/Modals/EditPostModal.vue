@@ -3,10 +3,6 @@ import { ref } from "vue";
 import axios from "../axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { getPosts } from "../stores/getPosts";
-
-const postsStore = getPosts();
-const upToDate = postsStore.upToDate;
 
 const props = defineProps({
   show: {
@@ -18,16 +14,15 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "updated"]);
 
 let title = ref(props["post"]["title"]);
 let body = ref(props["post"]["body"]);
-let image = ref(props["post"]["image"]);
+let img = ref(props["post"]["image"]);
 
 // uploading image
 const uploadfile = (e: any) => {
-  console.log(e.target);
-  image.value = e.target.files[0];
+  img.value = e.target.files[0];
 };
 
 // creating post
@@ -36,16 +31,12 @@ const editPost = async () => {
     const token = JSON.parse(localStorage.getItem("token")!);
     // 1-create form data
     const formData = new FormData();
-    if (title.value) {
-      formData.append("title", title.value);
-    }
-    if (body.value) {
-      formData.append("body", body.value);
-    }
-    if (image.value) {
-      formData.append("image", image.value);
-    }
+    formData.append("title", title.value);
+    formData.append("body", body.value);
+    formData.append("image", img.value);
+
     formData.append("_method", "put");
+
     // 2-creating header
     const headers = {
       "Content-Type": "multipart/form-data; ",
@@ -69,10 +60,10 @@ const editPost = async () => {
       // close modal
       emit("close");
       // update posts
-      upToDate();
+      emit("updated");
     }
   } catch (e: any) {
-    let error: string = e.response.data.error_message;
+    let error = e.response.data.errors.image;
     (function () {
       toast.error(error, {
         position: "bottom-right",
@@ -105,7 +96,7 @@ const editPost = async () => {
       <textarea type="text" v-model="body" id="post-body"></textarea>
 
       <label for="img">image</label>
-      <input type="file" id="img" @change="uploadfile" />
+      <input type="file" id="img" v-on:change="uploadfile" />
 
       <button class="create-post" @click="editPost">Edit</button>
     </div>

@@ -8,16 +8,22 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      // component: HomeView,
       component: () => import("../views/HomeView.vue"),
       meta: {
         title: "Home",
       },
     },
     {
+      path: "/profile",
+      name: "profile",
+      component: () => import("../components/Profile.vue"),
+      meta: {
+        title: "profile",
+      },
+    },
+    {
       path: "/log-in",
       name: "log-in",
-      // component: LogIn,
       component: () => import("../components/LogIn.vue"),
       meta: {
         title: "Log In",
@@ -26,7 +32,6 @@ const router = createRouter({
     {
       path: "/sign-up",
       name: "sign-up",
-      // component: signUp,
       component: () => import("../components/signUp.vue"),
       meta: {
         title: "Sign Up",
@@ -36,8 +41,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _from, next) => {
-  document: Document;
-
   document.title = to.meta.title;
   next();
 });

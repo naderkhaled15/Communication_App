@@ -324,21 +324,34 @@ body {
   }
 }
 
-// posts footer
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  .user-info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 9px;
+// posts header
+.card-header {
+  cursor: pointer;
+  .btn-delete {
+    margin-left: auto;
   }
 }
 
-// posts header
-.card-header {
-  .btn-delete {
-    margin-left: auto;
+// user info
+.user-info {
+  background-color: #55555515;
+  border-radius: 9px;
+  padding: 9px;
+  font-size: 17px;
+  .user-name {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+  .user-count {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    span {
+      font-size: 20px;
+      font-weight: bold;
+    }
   }
 }

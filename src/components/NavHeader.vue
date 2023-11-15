@@ -5,25 +5,33 @@ import { toast } from "vue3-toastify";
 
 let userCard = ref(JSON.parse(localStorage.getItem("user-info") || "{}"));
 
-let show = ref(userCard);
+let show = ref(userCard.value ? true : false),
+  showBtn = ref(userCard.value ? true : false);
 
 onMounted(() => {
   let token = localStorage.getItem("token");
-  if (token) {
-  } else {
+  if (router.currentRoute.value.name == "profile") {
+    showBtn.value = false;
+  } else if (router.currentRoute.value.name == "home") {
+    showBtn.value = true;
+  }
+  if (!token) {
     show.value = false;
+    showBtn.value = false;
   }
 });
 
 window.addEventListener("storage", function () {
   show.value = false;
+  showBtn.value = false;
 });
 
 let logOut = () => {
-  localStorage.clear();
   router.push({ name: "home" });
+  localStorage.clear();
   show.value = false;
-  location.reload();
+  showBtn.value = false;
+
   // toast func
   (function () {
     toast.error("Logged Out", {
@@ -43,7 +51,6 @@ let logOut = () => {
     >
       <div class="container">
         <RouterLink class="navbar-brand fw-bold" to="/"> comuapp </RouterLink>
-        <!-- <a class="navbar-brand fw-bold" href="#">comuapp</a> -->
         <!-- menu button at sm screens -->
         <button
           class="navbar-toggler"
@@ -61,11 +68,9 @@ let logOut = () => {
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
               <RouterLink class="nav-link" to="/"> home </RouterLink>
-              <!-- <a class="nav-link" href="#">home</a> -->
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/"> profile </RouterLink>
-              <!-- <a class="nav-link" href="#">profile</a> -->
+              <RouterLink class="nav-link" to="/profile"> profile </RouterLink>
             </li>
           </ul>
           <form class="form-inline my-2 my-lg-0" v-if="!show">
@@ -113,7 +118,7 @@ let logOut = () => {
     </nav>
     <!-- end nav bar -->
     <!--start add post button -->
-    <button class="add-post-button" v-if="show" @click="$emit('add')">
+    <button class="add-post-button" v-if="showBtn" @click="$emit('add')">
       &#x2b;
     </button>
     <!--end add post button -->

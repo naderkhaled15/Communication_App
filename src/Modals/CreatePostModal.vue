@@ -25,10 +25,8 @@ const uploadfile = (event: any) => {
 
 // creating post
 const createPost = async () => {
+  const token = JSON.parse(localStorage.getItem("token") || "{}");
   try {
-    const token = JSON.parse(localStorage.getItem("token") || "{}");
-
-    // 1-create form data
     const formData = new FormData();
     if (title.value) {
       formData.append("title", title.value);
@@ -48,7 +46,6 @@ const createPost = async () => {
     if (result.status == 201) {
       // close modal
       emit("close");
-
       // update posts
       fireEmit();
       //reset values

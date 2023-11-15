@@ -17,7 +17,6 @@ document.addEventListener("scroll", () => {
     document.documentElement.scrollHeight - window.innerHeight;
 
   if (window.scrollY >= scrollableHeight) {
-    // increase page includes getPosts func recall
     increasePage();
   }
 });

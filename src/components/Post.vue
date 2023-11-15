@@ -6,11 +6,13 @@ import { inject, onMounted, ref } from "vue";
 import ShowCommentModal from "../Modals/ShowCommentModal.vue";
 import EditPostModal from "../Modals/EditPostModal.vue";
 import axios from "../axios";
+import { toast } from "vue3-toastify";
+import router from "../router";
 
 // pinia store
 const postsStore = getPosts();
 const commentStore = getComments();
-const { allPosts } = storeToRefs(postsStore);
+const { allPosts, userId } = storeToRefs(postsStore);
 const { mainPostId } = storeToRefs(commentStore);
 const getAllPosts = postsStore.getAllPosts;
 const upToDate = postsStore.upToDate;
@@ -19,10 +21,18 @@ let postId = ref();
 const postObj = ref();
 const userInfo = JSON.parse(localStorage.getItem("user-info")!);
 const token = JSON.parse(localStorage.getItem("token")!);
+// for testing
 
+// for testing
 // watch local storage
 window.addEventListener("storage", function () {
-  this.location.reload();
+  if (
+    !this.localStorage.getItem("token") ||
+    !this.localStorage.getItem("user-info")
+  ) {
+    this.localStorage.clear();
+    this.location.reload();
+  }
 });
 
 // check on mounted
@@ -58,13 +68,35 @@ const checkAppearance = (userId: number) => {
 
 // delete post
 const deletePost = async (postId: number) => {
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  };
+  let cnfrm = confirm("are you sure");
+  if (!cnfrm) {
+    return;
+  }
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
 
-  let result = await axios.delete(`/posts/${postId}`, { headers });
-  upToDate();
+    let result = await axios.delete(`/posts/${postId}`, { headers });
+    if (result.status == 200) {
+      upToDate();
+      (function () {
+        toast.success("Post deleted successfully", {
+          position: "bottom-right",
+          autoClose: 1000,
+          closeButton: false,
+          pauseOnHover: false,
+        });
+      })();
+    }
+  } catch (e: any) {
+    console.log(e.message);
+  }
+};
+const showProfile = (authorId: number) => {
+  userId.value = authorId;
+  router.push({ name: "profile" });
 };
 </script>
 
@@ -75,7 +107,10 @@ const deletePost = async (postId: number) => {
     :key="post['id']"
   >
     <!-- post header -->
-    <div class="card-header d-flex align-items-center gap-2">
+    <div
+      class="card-header d-flex align-items-center gap-2"
+      @click="showProfile(post['author']['id'])"
+    >
       <img
         class="rounded-circle border border-dark"
         :src="post['author']['profile_image']"
@@ -108,7 +143,12 @@ const deletePost = async (postId: number) => {
     <!-- post footer -->
     <div class="card-footer text-muted">
       <div class="d-flex flex-row align-items-center">
-        <button class="btn">
+        <button
+          v-if="checkAppearance(post['author']['id'])"
+          type="button"
+          class="btn btn-outline-secondary btn-sm mx-2"
+          @click="editPostId(post)"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -130,14 +170,6 @@ const deletePost = async (postId: number) => {
           ({{ post["comments_count"] }}) comments
         </button>
       </div>
-      <button
-        v-if="checkAppearance(post['author']['id'])"
-        type="button"
-        class="btn btn-outline-secondary btn-sm"
-        @click="editPostId(post)"
-      >
-        edit
-      </button>
     </div>
   </div>
   <!-- edit post model -->
@@ -146,6 +178,7 @@ const deletePost = async (postId: number) => {
     :show="showEdit"
     @close="showEdit = false"
     :post="postObj"
+    @updated="upToDate"
   />
   <ShowCommentModal
     v-if="showComment"
