@@ -26,7 +26,7 @@ const router = createRouter({
       name: "log-in",
       component: () => import("../components/LogIn.vue"),
       meta: {
-        title: "Log In",
+        title: "Log In and remember me",
       },
     },
     {
