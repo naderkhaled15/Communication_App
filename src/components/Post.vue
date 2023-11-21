@@ -20,9 +20,7 @@ let postId = ref();
 const postObj = ref();
 const userInfo = JSON.parse(localStorage.getItem("user-info")!);
 const token = JSON.parse(localStorage.getItem("token")!);
-// for testing
 
-// for testing
 // watch local storage
 window.addEventListener("storage", function () {
   if (
@@ -86,10 +84,15 @@ const deletePost = async (postId: number) => {
     console.log(e.message);
   }
 };
+
 const showProfile = (authorId: number) => {
   userId.value = authorId;
   router.push({ name: "profile" });
 };
+
+const useAvatar = (userName:string) => {
+  return `https://ui-avatars.com/api/?background=random&name=${userName}`
+}
 </script>
 
 <template>
@@ -103,10 +106,26 @@ const showProfile = (authorId: number) => {
       class="card-header d-flex align-items-center gap-2"
       @click="showProfile(post['author']['id'])"
     >
-      <img
+      <!-- <img
         class="rounded-circle border border-dark"
         :src="post['author']['profile_image']"
         alt=""
+        width="40"
+        height="40"
+      /> -->
+      <img
+      v-if="post['author']['profile_image']['length']>0"
+        class="rounded-circle border border-dark"
+        :src="post['author']['profile_image']"
+        alt="user img"
+        width="40"
+        height="40"
+      />
+      <img
+        v-else
+        class="rounded-circle border border-dark"
+        :src="useAvatar(post['author']['name'])"
+        alt="user img"
         width="40"
         height="40"
       />

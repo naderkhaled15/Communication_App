@@ -95,21 +95,35 @@ const deletePost = async (postId: number) => {
     console.log(e.message);
   }
 };
+const useAvatar = (userName:string) => {
+  return `https://ui-avatars.com/api/?background=random&bold=true&name=${userName}`
+}
 </script>
 <template>
   <div class="container-lg">
     <NavHeader :showAdd="false" />
     <!-- user card info -->
     <div class="profile-box my-3 shadow-sm user-info">
-      <div class="row" v-for="userCard in userinfo">
-        <div class="col-2">
+      <div class="row" v-for="userCard in userinfo ">
+        <div class="col-2"> 
           <img
+          v-if="userCard['profile_image']['length'] > 0"
             class="rounded-circle"
             alt="user photo"
             :src="userCard['profile_image']"
             width="120"
             height="120"
           />
+          <img
+          v-else
+            class="rounded-circle"
+            alt="user photo"
+            :src="useAvatar(userCard['name'])"
+            width="120"
+            height="120"
+          />
+     
+      
         </div>
         <div class="col-5 user-name">
           <p v-if="userCard['email']">{{ userCard["email"] }}</p>
@@ -136,12 +150,22 @@ const deletePost = async (postId: number) => {
       <!-- post header -->
       <div class="card-header d-flex align-items-center gap-2">
         <img
+        v-if="post['author']['profile_image']['length']>0"
           class="rounded-circle border border-dark"
           :src="post['author']['profile_image']"
-          alt=""
+          alt="user img"
           width="40"
           height="40"
         />
+        <img
+          v-else
+          class="rounded-circle border border-dark"
+          :src="useAvatar(post['author']['name'])"
+          alt="user img"
+          width="40"
+          height="40"
+        />
+    
         <h6 class="user-name fw-bold">
           {{ post["author"]["username"] }}
         </h6>

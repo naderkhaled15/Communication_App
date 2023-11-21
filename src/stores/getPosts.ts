@@ -3,12 +3,12 @@ import axios from "../axios";
 export const getPosts = defineStore("posts", {
   state: () => ({
     allPosts: [],
-    perPage: 5,
-    currentPage: 1,
+    perPage: 5 as number,
+    currentPage: 1 as number,
     // current user posts
     userPosts: [],
     authorInfo: [],
-    userId: 0,
+    userId: 0 as number,
   }),
   actions: {
     async getAllPosts() {
@@ -18,13 +18,13 @@ export const getPosts = defineStore("posts", {
         );
         let posts: never[] = result.data.data;
         this.allPosts.push(...posts);
-        return this.allPosts;
+        return this.allPosts
       } catch (e: any) {
         console.error(e.message);
       }
     },
 
-    upToDate() {
+    upToDate():void{
       this.allPosts = [];
       this.getAllPosts();
     },
@@ -44,8 +44,8 @@ export const getPosts = defineStore("posts", {
       this.authorInfo = [];
       try {
         id = this.userId;
-        let result = await axios.get(`/users/${id}`);
-        let info: [] = result.data.data;
+        let result = await axios.get(`/users/${id}`);        
+        let info:[] = result.data.data;
         this.authorInfo.push(info);
         return this.authorInfo;
       } catch (e: any) {
