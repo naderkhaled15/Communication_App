@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import axios from "../axios";
-import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import { showToast } from "@/types/ToastFunc";
 
 const props = defineProps({
   show: {
@@ -48,30 +48,16 @@ const editPost = async () => {
     });
 
     // check result status
-    if (result.status == 200) {
-      (function () {
-        toast.success("Post updated successfully", {
-          position: "bottom-right",
-          autoClose: 1000,
-          closeButton: false,
-          pauseOnHover: false,
-        });
-      })();
+    if (result.status == 200) {   
+      showToast('success',"Post updated successfully")
       // close modal
       emit("close");
       // update posts
       emit("updated");
     }
   } catch (e: any) {
-    let error = e.response.data.errors.image;
-    (function () {
-      toast.error(error, {
-        position: "bottom-right",
-        autoClose: 1000,
-        closeButton: false,
-        pauseOnHover: false,
-      });
-    })();
+    let message = e.response.data.errors.image;
+    showToast('error',message)
   }
 };
 </script>

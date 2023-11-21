@@ -2,8 +2,8 @@
 import { onMounted, reactive, ref } from "vue";
 import axios from "../axios";
 import router from "../router";
-import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import { showToast } from "@/types/ToastFunc";
 
 let params = reactive({
   username: "",
@@ -49,25 +49,10 @@ let signUp = async () => {
     }
     params.name = params.password = params.username = "";
     router.push({ name: "home" });
-    console.log("signed up successfully");
-    (function () {
-      toast.success("signed up successfully", {
-        position: "bottom-right",
-        autoClose: 1000,
-        closeButton: false,
-        pauseOnHover: false,
-      });
-    })();
+    showToast('success',"signed up successfully")
   } catch (e: any) {
     let message = e.response.data.message;
-    (function () {
-      toast.error(message, {
-        position: "bottom-right",
-        autoClose: 1000,
-        closeButton: false,
-        pauseOnHover: false,
-      });
-    })();
+    showToast('error',message)
   }
 };
 </script>

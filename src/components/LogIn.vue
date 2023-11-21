@@ -2,9 +2,9 @@
 import axios from "../axios";
 import { onMounted, reactive, ref } from "vue";
 import router from "../router";
-import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { getPosts } from "../stores/getPosts";
+import { showToast } from "@/types/ToastFunc";
 
 const postsStore = getPosts();
 
@@ -40,24 +40,10 @@ let login = async () => {
     params.username = params.password = "";
     router.push({ name: "home" });
     upToDate();
-    (function () {
-      toast.success("Logged In successfully", {
-        position: "bottom-right",
-        autoClose: 1000,
-        closeButton: false,
-        pauseOnHover: false,
-      });
-    })();
+    showToast('success',"logged in suuccessfully")
   } catch (e: any) {
     let message = e.response.data.message;
-    (function () {
-      toast.error(message, {
-        position: "bottom-right",
-        autoClose: 1000,
-        closeButton: false,
-        pauseOnHover: false,
-      });
-    })();
+    showToast('error',message)
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { toast } from "vue3-toastify";
 import axios from "../axios";
+import { showToast } from "@/types/ToastFunc";
 
 let comment = ref<String>("");
 const props = defineProps({ postId: Number });
@@ -26,27 +26,13 @@ const addComment = async () => {
       );
       if (result.status == 201) {
         // toast message
-        (function () {
-          toast.success("comment added", {
-            position: "bottom-right",
-            autoClose: 1000,
-            closeButton: false,
-            pauseOnHover: false,
-          });
-        })();
+        showToast('success',"comment added")
         comment.value = "";
         emit("success");
       }
     } else {
       // toast message
-      (function () {
-        toast.warning("write a comment", {
-          position: "bottom-right",
-          autoClose: 1000,
-          closeButton: false,
-          pauseOnHover: false,
-        });
-      })();
+      showToast('warning',"write a comment")
     }
   } catch (e: any) {
     console.log(e.message);

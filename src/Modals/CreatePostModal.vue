@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { inject, ref } from "vue";
 import axios from "../axios";
-import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import { showToast } from "@/types/ToastFunc";
 
 defineProps({
   show: Boolean,
@@ -51,25 +51,12 @@ const createPost = async () => {
       //reset values
       title.value = body.value = image.value = "";
       // show notifications
-      (function () {
-        toast.success("Post created successfully", {
-          position: "bottom-right",
-          autoClose: 1000,
-          closeButton: false,
-          pauseOnHover: false,
-        });
-      })();
+      showToast('success',"Post created successfully")
+      
     }
   } catch (e: any) {
     const message = e.response.data.message;
-    (function () {
-      toast.error(message, {
-        position: "bottom-right",
-        autoClose: 1000,
-        closeButton: false,
-        pauseOnHover: false,
-      });
-    })();
+    showToast('error',message)
   }
 };
 </script>

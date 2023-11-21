@@ -6,8 +6,8 @@ import { inject, onMounted, ref } from "vue";
 import ShowCommentModal from "../Modals/ShowCommentModal.vue";
 import EditPostModal from "../Modals/EditPostModal.vue";
 import axios from "../axios";
-import { toast } from "vue3-toastify";
 import router from "../router";
+import { showToast } from "@/types/ToastFunc";
 
 // pinia store
 const postsStore = getPosts();
@@ -16,7 +16,6 @@ const { allPosts, userId } = storeToRefs(postsStore);
 const { mainPostId } = storeToRefs(commentStore);
 const getAllPosts = postsStore.getAllPosts;
 const upToDate = postsStore.upToDate;
-const emit = defineEmits(["shouldUpdate"]);
 let postId = ref();
 const postObj = ref();
 const userInfo = JSON.parse(localStorage.getItem("user-info")!);
@@ -81,14 +80,7 @@ const deletePost = async (postId: number) => {
     let result = await axios.delete(`/posts/${postId}`, { headers });
     if (result.status == 200) {
       upToDate();
-      (function () {
-        toast.success("Post deleted successfully", {
-          position: "bottom-right",
-          autoClose: 1000,
-          closeButton: false,
-          pauseOnHover: false,
-        });
-      })();
+      showToast('success',"Post deleted successfully")
     }
   } catch (e: any) {
     console.log(e.message);

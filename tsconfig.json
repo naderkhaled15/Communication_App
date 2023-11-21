@@ -29,7 +29,8 @@
     "experimentalDecorators": true,
     "types": ["vite/client"],
     "noEmitOnError": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {"@/*":["./src/*"]}
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

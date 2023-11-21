@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import router from "../router";
-import { toast } from "vue3-toastify";
+import { showToast } from "@/types/ToastFunc";
 
 let userCard = ref(JSON.parse(localStorage.getItem("user-info") || "{}"));
 
@@ -33,14 +33,7 @@ let logOut = () => {
   showBtn.value = false;
 
   // toast func
-  (function () {
-    toast.error("Logged Out", {
-      position: "bottom-right",
-      autoClose: 1000,
-      closeButton: false,
-      pauseOnHover: false,
-    });
-  })();
+  showToast('error',"logged out")
 };
 </script>
 <template>

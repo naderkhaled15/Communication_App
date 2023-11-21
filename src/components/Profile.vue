@@ -7,8 +7,8 @@ import { getPosts } from "../stores/getPosts";
 import { storeToRefs } from "pinia";
 import { getComments } from "../stores/getComments";
 import ShowCommentModal from "../Modals/ShowCommentModal.vue";
-import { toast } from "vue3-toastify";
 import EditPostModal from "../Modals/EditPostModal.vue";
+import { showToast } from "@/types/ToastFunc";
 
 const commentStore = getComments();
 const postStore = getPosts();
@@ -88,14 +88,7 @@ const deletePost = async (postId: number) => {
     let result = await axios.delete(`/posts/${postId}`, { headers });
     if (result.status == 200) {
       updateUserPosts;
-      (function () {
-        toast.success("Post deleted successfully", {
-          position: "bottom-right",
-          autoClose: 1000,
-          closeButton: false,
-          pauseOnHover: false,
-        });
-      })();
+      showToast("success","Post deleted successfully")
       updateUserPosts();
     }
   } catch (e: any) {
