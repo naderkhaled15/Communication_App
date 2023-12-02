@@ -3,7 +3,7 @@ import axios from "../axios";
 export const getPosts = defineStore("posts", {
   state: () => ({
     allPosts: [],
-    perPage: 5 as number,
+    perPage: 10 as number,
     currentPage: 1 as number,
     // current user posts
     userPosts: [],
@@ -30,8 +30,8 @@ export const getPosts = defineStore("posts", {
     },
     async getUserPosts(id: number) {
       this.userPosts = [];
+      id = this.userId;
       try {
-        id = this.userId;
         let result = await axios.get(`/users/${id}/posts`);
         let posts: [] = result.data.data;
         this.userPosts.push(...posts);

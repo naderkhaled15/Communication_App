@@ -14,7 +14,7 @@ const router = createRouter({
       },
     },
     {
-      path: "/profile",
+      path: "/profile/:id",
       name: "profile",
       component: () => import("../components/Profile.vue"),
       meta: {
@@ -37,11 +37,19 @@ const router = createRouter({
         title: "Sign Up",
       },
     },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "Not found",
+      component: () => import("../components/NotFound.vue"),
+   meta:{
+    title:"not Found"
+   }
+    }
   ],
 });
 
 router.beforeEach((to, _from, next) => {
-  document.title = to.meta.title;
+  document.title = to.meta.title as string;
   next();
 });
 

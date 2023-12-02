@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import router from "../router";
 import { showToast } from "@/types/ToastFunc";
+import { useRouter } from "vue-router";
 
 let userCard = ref(JSON.parse(localStorage.getItem("user-info") || "{}"));
-
+const router=useRouter()
 let show = ref(userCard.value ? true : false),
   showBtn = ref(userCard.value ? true : false);
+
+const emit=defineEmits(['add'])
+
 
 onMounted(() => {
   let token = localStorage.getItem("token");
@@ -22,8 +25,15 @@ onMounted(() => {
 });
 
 window.addEventListener("storage", function () {
-  show.value = false;
-  showBtn.value = false;
+  
+  if (
+    !this.localStorage.getItem("token") ||
+    !this.localStorage.getItem("user-info")
+  ) {
+    this.localStorage.clear()
+    show.value = false;
+    showBtn.value = false;
+  }
 });
 
 let logOut = () => {
@@ -35,68 +45,59 @@ let logOut = () => {
   // toast func
   showToast('error',"logged out")
 };
+
+const addEmit=()=>{
+  emit('add')
+}
 </script>
 <template>
-  <div class="container">
-    <!-- start nav bar -->
-    <nav
-      class="navbar navbar-expand-lg navbar-light bg-light px-2 py-2 rounded"
-    >
-      <div class="container">
-        <RouterLink class="navbar-brand fw-bold" to="/"> comuapp </RouterLink>
-        <!-- menu button at sm screens -->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <RouterLink class="nav-link" to="/"> home </RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink class="nav-link" to="/profile"> profile </RouterLink>
-            </li>
-          </ul>
-          <form class="form-inline my-2 my-lg-0" v-if="!show">
-            <!-- login button -->
-            <RouterLink
-              class="btn btn-outline-success my-2 my-sm-0"
-              to="/log-in"
-            >
-              log in
-            </RouterLink>
-            <!-- login button -->
-            <RouterLink
-              class="btn btn-outline-success my-2 my-sm-0"
-              to="/sign-up"
-            >
-              register
-            </RouterLink>
+  <div>      
+  <b-navbar toggleable="md" type="dark" variant="info" class="navbar navbar-expand-lg navbar-light bg-light px-2 py-2 rounded" >
+    <RouterLink class="navbar-brand fw-bold" to="/"> comuapp </RouterLink>
+    
+    <b-navbar-toggle target="nav-collapse" class="rounded-circle border border-dark p-0"
+>
+      <form v-if="show">
+              <img
+              v-if="show"
+              loading="lazy"
+              class=" rounded-circle"
+              :src="userCard['profile_image']"
+              width="35"
+              height="35"
+              alt="user img"
+                
+              />
           </form>
-          <form class="form-inline my-2 my-lg-0" v-if="show">
-            <!-- user name and image -->
-            <!-- <h6 class="user-name fw-bold">
-            {{ userCard["_rawValue"]["name"] }}
-          </h6>  -->
-            <img
+    </b-navbar-toggle>
+    <!-- for collapsing -->
+    <b-collapse id="nav-collapse" is-nav>
+      <!-- Right aligned nav items -->
+      <b-navbar-nav class="ml-auto container">
+       
+
+        <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <RouterLink class="nav-link" to="/"> home </RouterLink>
+              </li>
+              <li class="nav-item">
+                <RouterLink v-if="show" class="nav-link" :to="'/profile/'+userCard.id"> profile </RouterLink>
+              </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" v-if="show">
+            <span role="button" @click="router.push(`/profile/${userCard.id}`)">
+              <img
+              loading="lazy"
               :src="userCard['profile_image']"
               class="rounded-circle border border-dark"
               width="30"
               height="30"
-              alt=""
-            />
-            <!-- username -->
-
-            <h6 class="fw-bold d-inline mx-3">{{ userCard["username"] }}</h6>
+              alt="user img"
+                
+              />
+              <!-- username -->
+              <h6 class="fw-bold d-inline mx-3">{{ userCard["username"] }}</h6>
+            </span>
 
             <!-- logout button -->
             <button
@@ -106,14 +107,32 @@ let logOut = () => {
               log out
             </button>
           </form>
-        </div>
-      </div>
-    </nav>
+        <form class="form-inline my-2 my-lg-0 " v-if="!show">
+                <!-- login button -->
+                <RouterLink
+                  class="btn btn-outline-success my-2 my-sm-0"
+                  to="/log-in"
+                >
+                  log in
+                </RouterLink>
+                <!-- login button -->
+                <RouterLink
+                  class="btn btn-outline-success my-2 my-sm-0"
+                  to="/sign-up"
+                >
+                  register
+                </RouterLink>
+          </form>
+    
+      </b-navbar-nav>
+    </b-collapse>
+
+  </b-navbar>     
+</div> 
     <!-- end nav bar -->
     <!--start add post button -->
-    <button class="add-post-button" v-if="showBtn" @click="$emit('add')">
+    <button class="add-post-button" v-if="showBtn" @click="addEmit()" >
       &#x2b;
     </button>
     <!--end add post button -->
-  </div>
 </template>

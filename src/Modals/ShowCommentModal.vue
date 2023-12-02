@@ -15,8 +15,14 @@ const props = defineProps({ id: Number });
 
 let showComment = ref<Boolean>(localStorage.getItem("token") ? true : false);
 
-window.addEventListener("storage", function () {
-  showComment.value = false;
+window.addEventListener("storage", function ():void {
+  if (
+    !this.localStorage.getItem("token") ||
+    !this.localStorage.getItem("user-info")
+  ) {
+    showComment.value = false;
+    this.localStorage.clear();
+  }
 });
 
 const callComments = async () => {
@@ -32,6 +38,9 @@ onMounted(async () => {
     console.log(e.message);
   }
 });
+const useAvatar = (userName:string) => {
+  return `https://ui-avatars.com/api/?background=random&name=${userName}`
+}
 </script>
 <template>
   <div class="modal-mask">
@@ -43,12 +52,26 @@ onMounted(async () => {
       <!-- post header -->
       <div class="card-header d-flex align-items-center gap-2">
         <img
+        v-if="post['author']['profile_image']['length']>0"
+        loading="lazy"
           class="rounded-circle border border-dark"
           :src="post['author']['profile_image']"
-          alt=""
+          alt="user img"
           width="40"
           height="40"
+           
         />
+      <img
+      v-else
+      loading="lazy"
+        class="rounded-circle border border-dark"
+        :src="useAvatar(post['author']['name'])"
+        alt="user img"
+        width="40"
+        height="40"
+         
+      />
+
         <h6 class="user-name fw-bold">
           {{ post["author"]["username"] }}
         </h6>
@@ -61,7 +84,7 @@ onMounted(async () => {
       </div>
       <!-- post body -->
       <div class="card-body">
-        <img :src="post['image']" alt="" class="post-img" />
+        <img loading="lazy" :src="post['image']" alt="" class="post-img"  />
         <small class="text-small">{{ post["created_at"] }}</small>
         <h5 class="card-title" v-if="post['title']">{{ post["title"] }}</h5>
         <p class="card-text" v-if="post['body']">
@@ -101,12 +124,27 @@ onMounted(async () => {
               <li>
                 <div>
                   <img
+                  v-if="comment['author']['profile_image']['length']>0"
+                  loading="lazy"
                     class="rounded-circle border border-dark"
                     :src="comment['author']['profile_image']"
-                    alt=""
+                    alt="user img"
                     width="40"
                     height="40"
+                     
                   />
+                  <img
+                  v-else
+                  loading="lazy"
+                    class="rounded-circle border border-dark"
+                    :src="useAvatar(comment['author']['name'])"
+                    alt="user img"
+                    width="40"
+                    height="40"
+                     
+                  />
+   
+                  
                   <p>{{ comment["author"]["name"] }}</p>
                 </div>
                 <p>{{ comment["body"] }}</p>

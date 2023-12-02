@@ -2,24 +2,32 @@
 import { storeToRefs } from "pinia";
 import { getPosts } from "../stores/getPosts";
 import { getComments } from "../stores/getComments";
-import { inject, onMounted, ref } from "vue";
-import ShowCommentModal from "../Modals/ShowCommentModal.vue";
-import EditPostModal from "../Modals/EditPostModal.vue";
+import { defineAsyncComponent, inject, onMounted, ref } from "vue";
 import axios from "../axios";
 import router from "../router";
 import { showToast } from "@/types/ToastFunc";
 
 // pinia store
+const ShowCommentModal=defineAsyncComponent(()=>import("../Modals/ShowCommentModal.vue"))
+const EditPostModal =defineAsyncComponent(()=>import("../Modals/EditPostModal.vue"))
 const postsStore = getPosts();
 const commentStore = getComments();
-const { allPosts, userId } = storeToRefs(postsStore);
+const { allPosts } = storeToRefs(postsStore);
 const { mainPostId } = storeToRefs(commentStore);
 const getAllPosts = postsStore.getAllPosts;
 const upToDate = postsStore.upToDate;
 let postId = ref();
 const postObj = ref();
-const userInfo = JSON.parse(localStorage.getItem("user-info")!);
-const token = JSON.parse(localStorage.getItem("token")!);
+const userInfo = ref(JSON.parse(localStorage.getItem("user-info")!));
+const token = ref(JSON.parse(localStorage.getItem("token")!));
+let showComment = ref(false);
+let showEdit = ref(false);
+const emitter: any = inject("emitter");
+
+const checkAppearance = (userId: number) => {
+  let appear =userId== userInfo.value?.id ?true:false;
+  return appear;
+};
 
 // watch local storage
 window.addEventListener("storage", function () {
@@ -28,7 +36,8 @@ window.addEventListener("storage", function () {
     !this.localStorage.getItem("user-info")
   ) {
     this.localStorage.clear();
-    this.location.reload();
+    userInfo.value="";
+    token.value=""
   }
 });
 
@@ -36,9 +45,6 @@ window.addEventListener("storage", function () {
 onMounted(() => {
   getAllPosts();
 });
-
-let showComment = ref(false);
-let showEdit = ref(false);
 
 // comment post id
 const updatePostId = (postid: number) => {
@@ -53,18 +59,13 @@ const editPostId = (postObject: object) => {
   postObj.value = postObject;
 };
 
-const emitter: any = inject("emitter");
-
 emitter.on("created", () => {
   upToDate();
 });
-const checkAppearance = (userId: number) => {
-  let appear = userInfo?.id == userId;
-  return appear;
-};
 
 // delete post
 const deletePost = async (postId: number) => {
+  const token = JSON.parse(localStorage.getItem("token")!);
   let cnfrm = confirm("are you sure");
   if (!cnfrm) {
     return;
@@ -77,19 +78,14 @@ const deletePost = async (postId: number) => {
 
     let result = await axios.delete(`/posts/${postId}`, { headers });
     if (result.status == 200) {
-      upToDate();
-      showToast('success',"Post deleted successfully")
+      showToast("success","Post deleted successfully")
+      upToDate()
     }
   } catch (e: any) {
     console.log(e.message);
   }
-};
-
-const showProfile = (authorId: number) => {
-  userId.value = authorId;
-  router.push({ name: "profile" });
-};
-
+    }
+  
 const useAvatar = (userName:string) => {
   return `https://ui-avatars.com/api/?background=random&name=${userName}`
 }
@@ -104,38 +100,35 @@ const useAvatar = (userName:string) => {
     <!-- post header -->
     <div
       class="card-header d-flex align-items-center gap-2"
-      @click="showProfile(post['author']['id'])"
-    >
-      <!-- <img
-        class="rounded-circle border border-dark"
-        :src="post['author']['profile_image']"
-        alt=""
-        width="40"
-        height="40"
-      /> -->
+      @click="router.push(`/profile/${post['author']['id']}`)"
+      >
       <img
       v-if="post['author']['profile_image']['length']>0"
+      loading="lazy"
         class="rounded-circle border border-dark"
         :src="post['author']['profile_image']"
         alt="user img"
         width="40"
         height="40"
+         
       />
       <img
         v-else
+        loading="lazy"
         class="rounded-circle border border-dark"
         :src="useAvatar(post['author']['name'])"
         alt="user img"
         width="40"
         height="40"
+         
       />
       <h6 class="user-name fw-bold">
         {{ post["author"]["username"] }}
       </h6>
       <button
+      type="button"
+      class="btn btn-outline-danger btn-sm btn-delete"
         v-if="checkAppearance(post['author']['id'])"
-        type="button"
-        class="btn btn-outline-danger btn-sm btn-delete"
         @click="deletePost(post['id'])"
       >
         delete
@@ -144,7 +137,7 @@ const useAvatar = (userName:string) => {
 
     <!-- post body -->
     <div class="card-body">
-      <img :src="post['image']" alt="" class="w-100" />
+      <img loading="lazy" :src="post['image']" alt="" class="w-100"  />
       <small class="text-small">{{ post["created_at"] }}</small>
       <h5 class="card-title" v-if="post['title']">{{ post["title"] }}</h5>
       <p class="card-text" v-if="post['body']">

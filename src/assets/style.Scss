@@ -2,14 +2,21 @@
 
 // variables
 $btn-color: rgb(50, 192, 240);
+$bg-color:#081b29;
+$second-bg-color:#112e42;
+$text-color:#ededed;
+$main-color:#00abf0;
+
 
 html {
   text-transform: capitalize;
+  font-size: 62.5%;
+  overflow-x: hidden;
 }
 
 body {
-  background-color: rgba(173, 216, 230, 0.3);
-  font-family: "Roboto", sans-serif;
+background-color: $bg-color;  
+font-family: "Roboto", sans-serif;
 }
 
 .container {
@@ -19,7 +26,6 @@ body {
 
 // nav bar
 .navbar {
-  // position: fixed;
   position: sticky;
   top: 0;
   border-bottom: 1px solid gray;

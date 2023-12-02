@@ -1,23 +1,27 @@
 <script setup lang="ts">
-import axios from "../axios";
-import { onMounted, ref } from "vue";
 import NavHeader from "./NavHeader.vue";
-import router from "../router";
+import { defineAsyncComponent, onBeforeMount, ref } from "vue";
+import {  useRoute } from "vue-router";
+import axios from "../axios";
 import { getPosts } from "../stores/getPosts";
 import { storeToRefs } from "pinia";
 import { getComments } from "../stores/getComments";
-import ShowCommentModal from "../Modals/ShowCommentModal.vue";
-import EditPostModal from "../Modals/EditPostModal.vue";
 import { showToast } from "@/types/ToastFunc";
 
+
+
+const ShowCommentModal=defineAsyncComponent(()=>import("../Modals/ShowCommentModal.vue"))
+const EditPostModal =defineAsyncComponent(()=>import("../Modals/EditPostModal.vue"))
+const route=useRoute()
 const commentStore = getComments();
 const postStore = getPosts();
-const { userPosts, authorInfo, userId } = storeToRefs(postStore);
 const { mainPostId } = storeToRefs(commentStore);
 const getUserPosts = postStore.getUserPosts;
 const getAuhtorCard = postStore.getAuhtorCard;
 const updateUserPosts = postStore.updateUserPosts;
+const { userPosts, authorInfo, userId } = storeToRefs(postStore);
 
+const {id}= route.params;
 let userinfo = ref([]);
 let postId = ref();
 let showComment = ref(false);
@@ -25,31 +29,20 @@ let showEdit = ref(false);
 const postObj = ref();
 let currentUser = JSON.parse(localStorage.getItem("user-info")!);
 
+onBeforeMount(()=>{
+  userId.value=+id
+  getAuhtorCard(Number(userId));
+  getUserPosts(Number(userId));
+  userinfo.value = authorInfo.value;
+})
+
 window.addEventListener("storage", function () {
   if (
     !this.localStorage.getItem("token") ||
     !this.localStorage.getItem("user-info")
   ) {
     this.localStorage.clear();
-    router.push({ name: "home" });
-  }
-});
-
-onMounted(async () => {
-  if (userId.value == 0) {
-    let token = localStorage.getItem("token");
-    if (token) {
-      userId.value = currentUser.id;
-      getAuhtorCard(currentUser.id);
-      getUserPosts(currentUser.id);
-    } else {
-      router.push({ name: "home" });
-    }
-    userinfo.value = authorInfo.value;
-  } else {
-    getAuhtorCard(Number(userId));
-    getUserPosts(Number(userId));
-    userinfo.value = authorInfo.value;
+    showToast('error',"please login again")
   }
 });
 
@@ -60,11 +53,10 @@ const updatePostId = (postid: number) => {
   showComment.value = true;
 };
 
-const checkAppearance = (userId: number) => {
-  const userData = JSON.parse(localStorage.getItem("user-info")!);
-  let appear = userData?.id == userId;
-  return appear;
-};
+const checkAuthentication=()=>{
+  let appear= Number(id)===currentUser?.id ?true:false
+  return appear
+}
 
 // edited post id
 const editPostId = (postObject: object) => {
@@ -87,7 +79,6 @@ const deletePost = async (postId: number) => {
 
     let result = await axios.delete(`/posts/${postId}`, { headers });
     if (result.status == 200) {
-      updateUserPosts;
       showToast("success","Post deleted successfully")
       updateUserPosts();
     }
@@ -95,34 +86,47 @@ const deletePost = async (postId: number) => {
     console.log(e.message);
   }
 };
+
 const useAvatar = (userName:string) => {
   return `https://ui-avatars.com/api/?background=random&bold=true&name=${userName}`
 }
+
+// //pagination 
+// document.addEventListener("scroll", () => {
+//   const scrollableHeight =
+//     document.documentElement.scrollHeight - window.innerHeight;
+
+//   if (window.scrollY >= scrollableHeight) {
+// console.log("get to end")
+//   }
+// });
+
 </script>
 <template>
   <div class="container-lg">
-    <NavHeader :showAdd="false" />
+    <NavHeader/>
     <!-- user card info -->
     <div class="profile-box my-3 shadow-sm user-info">
       <div class="row" v-for="userCard in userinfo ">
         <div class="col-2"> 
           <img
           v-if="userCard['profile_image']['length'] > 0"
-            class="rounded-circle"
-            alt="user photo"
-            :src="userCard['profile_image']"
-            width="120"
-            height="120"
+          loading="lazy"
+          class="rounded-circle"
+          alt="user photo"
+          :src="userCard['profile_image']"
+          width="120"
+          height="120" 
           />
           <img
           v-else
-            class="rounded-circle"
-            alt="user photo"
-            :src="useAvatar(userCard['name'])"
-            width="120"
-            height="120"
+          loading="lazy"
+          class="rounded-circle"
+          alt="user photo"
+          :src="useAvatar(userCard['name'])"
+          width="120"
+          height="120" 
           />
-     
       
         </div>
         <div class="col-5 user-name">
@@ -149,28 +153,34 @@ const useAvatar = (userName:string) => {
     >
       <!-- post header -->
       <div class="card-header d-flex align-items-center gap-2">
-        <img
+        <img 
         v-if="post['author']['profile_image']['length']>0"
+        loading="lazy"
           class="rounded-circle border border-dark"
           :src="post['author']['profile_image']"
           alt="user img"
           width="40"
-          height="40"
+          height="40" 
+           
+           
         />
         <img
           v-else
+          loading="lazy"
           class="rounded-circle border border-dark"
           :src="useAvatar(post['author']['name'])"
           alt="user img"
           width="40"
-          height="40"
+          height="40" 
+           
+           
         />
     
         <h6 class="user-name fw-bold">
           {{ post["author"]["username"] }}
         </h6>
         <button
-          v-if="checkAppearance(post['author']['id'])"
+          v-if="checkAuthentication()"
           type="button"
           class="btn btn-outline-danger btn-sm btn-delete"
           @click="deletePost(post['id'])"
@@ -180,7 +190,10 @@ const useAvatar = (userName:string) => {
       </div>
       <!-- post body -->
       <div class="card-body">
-        <img :src="post['image']" alt="" class="post-img w-100" />
+
+   
+        <img loading="lazy" :src="post['image']" alt=""  class="post-img w-100"/>
+
         <small class="text-small">{{ post["created_at"] }}</small>
         <h5 class="card-title" v-if="post['title']">{{ post["title"] }}</h5>
         <p class="card-text" v-if="post['body']">
@@ -192,7 +205,7 @@ const useAvatar = (userName:string) => {
         <div class="footer-container">
           <div class="footer-list">
             <button
-              v-if="checkAppearance(post['author']['id'])"
+              v-if="checkAuthentication()"
               type="button"
               class="btn btn-outline-secondary btn-sm mx-2"
               @click="editPostId(post)"

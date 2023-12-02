@@ -25,6 +25,7 @@ onMounted(() => {
 let upladeImage = (event: any) => {
   params.image = event.target.files[0];
 };
+
 let signUp = async () => {
   try {
     const formData = new FormData();
