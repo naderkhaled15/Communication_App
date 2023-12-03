@@ -64,7 +64,7 @@ const createPost = async () => {
   <div class="modal-mask" v-if="show">
     <div class="modal-container">
       <div class="modal-header">
-        <h6 class="modal-header">new post</h6>
+        <h6>new post</h6>
         <button
           class="btn btn-outline-danger my-sm-0 close-modal"
           @click="$emit('close')"
@@ -81,7 +81,7 @@ const createPost = async () => {
       <textarea type="text" v-model="body" id="post-body"></textarea>
 
       <label for="img">image</label>
-      <input type="file" id="img" @change="uploadfile" />
+      <input type="file" id="img" class="img-container" @change="uploadfile" />
 
       <button class="create-post" @click="createPost">create</button>
     </div>

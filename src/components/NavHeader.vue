@@ -51,9 +51,11 @@ const addEmit=()=>{
 }
 </script>
 <template>
-  <div>      
-  <b-navbar toggleable="md" type="dark" variant="info" class="navbar navbar-expand-lg navbar-light bg-light px-2 py-2 rounded" >
-    <RouterLink class="navbar-brand fw-bold" to="/"> comuapp </RouterLink>
+  <div class="nav-box">      
+    <!-- class="navbar navbar-expand-lg navbar-light bg-light px-2 py-2 rounded" -->
+  <b-navbar toggleable="md" type="dark" variant="faded" class="navbar navbar navbar-expand-lg
+px-2 py-2 rounded">
+    <RouterLink class="navbar-brand fw-bold" to="/"> comu<span>app</span></RouterLink>
     
     <b-navbar-toggle target="nav-collapse" class="rounded-circle border border-dark p-0"
 >
@@ -61,10 +63,10 @@ const addEmit=()=>{
               <img
               v-if="show"
               loading="lazy"
-              class=" rounded-circle"
+              class=" rounded-circle user-img"
               :src="userCard['profile_image']"
-              width="35"
-              height="35"
+              width="40"
+              height="40"
               alt="user img"
                 
               />
@@ -76,7 +78,7 @@ const addEmit=()=>{
       <b-navbar-nav class="ml-auto container">
        
 
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto" >
               <li class="nav-item active">
                 <RouterLink class="nav-link" to="/"> home </RouterLink>
               </li>
@@ -96,7 +98,7 @@ const addEmit=()=>{
                 
               />
               <!-- username -->
-              <h6 class="fw-bold d-inline mx-3">{{ userCard["username"] }}</h6>
+              <h6 class="user-name fw-bold d-inline mx-3">{{ userCard["username"] }}</h6>
             </span>
 
             <!-- logout button -->
@@ -132,7 +134,7 @@ const addEmit=()=>{
     <!-- end nav bar -->
     <!--start add post button -->
     <button class="add-post-button" v-if="showBtn" @click="addEmit()" >
-      &#x2b;
+        &#x2b;
     </button>
     <!--end add post button -->
 </template>

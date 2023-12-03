@@ -105,23 +105,21 @@ const useAvatar = (userName:string) => {
       <img
       v-if="post['author']['profile_image']['length']>0"
       loading="lazy"
-        class="rounded-circle border border-dark"
+        class="rounded-circle border border-dark user-img"
         :src="post['author']['profile_image']"
-        alt="user img"
+        alt="user img"        
         width="40"
         height="40"
-         
-      />
+        />
       <img
         v-else
         loading="lazy"
-        class="rounded-circle border border-dark"
+        class="rounded-circle border border-dark user-img"
         :src="useAvatar(post['author']['name'])"
-        alt="user img"
+        alt="user img"        
         width="40"
         height="40"
-         
-      />
+        />
       <h6 class="user-name fw-bold">
         {{ post["author"]["username"] }}
       </h6>
@@ -144,13 +142,14 @@ const useAvatar = (userName:string) => {
         {{ post["body"] }}
       </p>
     </div>
+
     <!-- post footer -->
     <div class="card-footer text-muted">
       <div class="d-flex flex-row align-items-center">
         <button
           v-if="checkAppearance(post['author']['id'])"
           type="button"
-          class="btn btn-outline-secondary btn-sm mx-2"
+          class="btn btn-md btn-edit"
           @click="editPostId(post)"
         >
           <svg
@@ -167,7 +166,7 @@ const useAvatar = (userName:string) => {
           </svg>
         </button>
         <button
-          class="btn p-0 fw-bold"
+          class="btn p-0 fw-bold btn-comment"
           @click="updatePostId(post['id'])"
           :id="post['id']"
         >
@@ -175,6 +174,7 @@ const useAvatar = (userName:string) => {
         </button>
       </div>
     </div>
+
   </div>
   <!-- edit post model -->
   <edit-post-modal

@@ -91,24 +91,14 @@ const useAvatar = (userName:string) => {
   return `https://ui-avatars.com/api/?background=random&bold=true&name=${userName}`
 }
 
-// //pagination 
-// document.addEventListener("scroll", () => {
-//   const scrollableHeight =
-//     document.documentElement.scrollHeight - window.innerHeight;
-
-//   if (window.scrollY >= scrollableHeight) {
-// console.log("get to end")
-//   }
-// });
-
 </script>
 <template>
-  <div class="container-lg">
+  <div class="display-container">
     <NavHeader/>
     <!-- user card info -->
     <div class="profile-box my-3 shadow-sm user-info">
       <div class="row" v-for="userCard in userinfo ">
-        <div class="col-2"> 
+        <div class="col-lg-2 col-md-4  col-sm-12 "> 
           <img
           v-if="userCard['profile_image']['length'] > 0"
           loading="lazy"
@@ -127,14 +117,13 @@ const useAvatar = (userName:string) => {
           width="120"
           height="120" 
           />
-      
         </div>
-        <div class="col-5 user-name">
-          <p v-if="userCard['email']">{{ userCard["email"] }}</p>
-          <p>{{ userCard["username"] }}</p>
-          <p>{{ userCard["name"] }}</p>
+        <div class="col-lg-5 col-md-4  col-sm-6 user-name">
+          <p v-if="userCard['email']"><span class="text-secondary fw-bold">Email:</span> {{ userCard["email"] }}</p>
+          <p><span class="text-secondary ">usernaem :</span> {{ userCard["username"] }}</p>
+          <p><span class="text-secondary ">name :</span> {{ userCard["name"] }}</p>
         </div>
-        <div class="col-5 user-count">
+        <div class="col-lg-5 col-md-4  col-sm-6 user-count">
           <p>
             <span>{{ userCard["posts_count"] }}</span> posts
           </p>
@@ -156,24 +145,20 @@ const useAvatar = (userName:string) => {
         <img 
         v-if="post['author']['profile_image']['length']>0"
         loading="lazy"
-          class="rounded-circle border border-dark"
+          class="rounded-circle border border-dark user-img"
           :src="post['author']['profile_image']"
           alt="user img"
           width="40"
-          height="40" 
-           
-           
+          height="40"  
         />
         <img
           v-else
           loading="lazy"
-          class="rounded-circle border border-dark"
+          class="rounded-circle border border-dark user-img"
           :src="useAvatar(post['author']['name'])"
           alt="user img"
           width="40"
           height="40" 
-           
-           
         />
     
         <h6 class="user-name fw-bold">
@@ -207,7 +192,7 @@ const useAvatar = (userName:string) => {
             <button
               v-if="checkAuthentication()"
               type="button"
-              class="btn btn-outline-secondary btn-sm mx-2"
+              class="btn btn-md btn-edit"
               @click="editPostId(post)"
             >
               <svg
@@ -223,7 +208,9 @@ const useAvatar = (userName:string) => {
                 />
               </svg>
             </button>
-            <button class="btn p-0 fw-bold" @click="updatePostId(post['id'])">
+            <button           
+              class="btn p-0 fw-bold btn-comment"
+              @click="updatePostId(post['id'])">
               ({{ post["comments_count"] }}) comments
             </button>
           </div>

@@ -1,22 +1,36 @@
+/* 
+- FONT SIZE SYSTEM (px)
+      10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+      
+  - SPACING SYSTEM (px)
+      2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
+      */
 @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=Inter:wght@400;500;700&family=Jomhuria&family=Open+Sans:ital,wght@0,300;0,500;1,700&family=Oswald:wght@300;500;700&family=Roboto:wght@300;400;500;900&family=Rubik:wght@300;400;600;800&display=swap");
 
 // variables
-$btn-color: rgb(50, 192, 240);
 $bg-color:#081b29;
 $second-bg-color:#112e42;
-$text-color:#ededed;
+$third-bg-color:#004460;
 $main-color:#00abf0;
+$text-color:#ededed;
+$btn-color:#ededed;
 
 
 html {
   text-transform: capitalize;
   font-size: 62.5%;
   overflow-x: hidden;
+@media (max-width: 84em) {font-size: 62.5%;  }
+@media (max-width: 75em) {  font-size:56.25%;}
+@media (max-width: 59em) { font-size: 50%; }
+@media (max-width: 44em) {  font-size: 50%; }
+@media (max-width: 34em) { font-size: 50%; }
 }
 
 body {
-background-color: $bg-color;  
-font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif;
+  color: $text-color;
+  background-color: $second-bg-color !important;
 }
 
 .container {
@@ -24,166 +38,308 @@ font-family: "Roboto", sans-serif;
   padding-left: 0 !important;
 }
 
-// nav bar
-.navbar {
-  position: sticky;
-  top: 0;
-  border-bottom: 1px solid gray;
-  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  width: 100%;
-  z-index: 999;
-
-  .navbar-brand:hover {
-    color: $btn-color;
-  }
-  .nav-link {
-    font-size: 14px;
-    font-weight: bold;
-    &:hover {
-      color: $btn-color;
-    }
-  }
+.display-container {
+  max-width: 150rem;
+  padding: 0 3rem;
+  margin: 0 auto;
 }
 
-.form-inline {
+// start navbar
+.nav-box {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  overflow: hidden;
+  .navbar {
+    border-bottom: 2px solid gray;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    width: 100%;    
+    background-color: $bg-color;
+    color: $text-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .navbar-brand {
+      color: $text-color;
+      font-size: 2.5rem;
+      font-weight: bold;      
+      @media (max-width: 84em) {font-size:2.4rem;}
+      @media (max-width: 75em) {  font-size:2rem;}
+      @media (max-width: 59em) { font-size:1.8rem; }
+      @media (max-width: 44em) {  font-size:1.5rem }
+      @media (max-width: 34em) { font-size:1.2rem; }
+    span{
+      color: $main-color;
+    }
+    }
+    .navbar-nav{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .nav-link {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: $text-color;
+        margin-left: 10px;
+        padding: 0;
+        &:hover {
+          color: $main-color;
+        }
+      }
+    }
+  }
+  .form-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0 10px 0 auto;
   .btn {
-    color: $btn-color;
-    border-color: $btn-color;
+    color: $text-color;
+    border-color: $text-color;
+    font-size: 1.4rem;
+    font-weight: 500;
     &:not(:last-child) {
       margin-right: 8px;
     }
     &:hover {
-      background-color: rgb(23, 173, 223);
-      color: white;
+      background-color: $main-color;
     }
-  }
-  .logout {
+  }  .logout {
     color: #ff0000;
     border-color: #ff0000;
+    font-size: 1.4rem;
     &:hover {
-      color: white;
       border-color: white;
       background-color: #ff0000;
+      color: $text-color;
+    }
+  }
+  span{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+    .user-name{
+      font-size: 1.7rem;   
     }
   }
 }
-
-// posts
-.user-name {
-  margin: 0;
 }
 
+//start posts card
+.card{
+background-color: $text-color !important;
+.card-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  .btn-delete {
+    margin-left: auto;
+    color: #ff0000;
+    border-color: #ff0000;
+    font-size: 1rem;
+    border-radius: 5px;
+    &:hover {
+      border-color: white;
+      background-color: #ff0000;
+      color: $text-color;
+    }
+  }
+  .user-name {
+  margin: 0 0 0 0.5rem;
+  font-size: 1.7rem;
+  font-weight: bold;
+  @media (max-width: 84em) {font-size:1.7rem;}
+  @media (max-width: 75em) {  font-size:1.6rem;}
+  @media (max-width: 59em) { font-size:1.5rem; }
+  @media (max-width: 44em) {  font-size:1.2rem }
+  @media (max-width: 34em) { font-size:1rem; }
+}
+}
+.card-body{
+  font-size: 1.7rem;
+  @media (max-width: 84em) {font-size:1.7rem;}
+  @media (max-width: 75em) {  font-size:1.6rem;}
+  @media (max-width: 59em) { font-size:1.5rem; }
+  @media (max-width: 44em) {  font-size:1.2rem }
+  @media (max-width: 34em) { font-size:1rem; }
 .text-small {
-  font-weight: 600;
-  color: #a6a8a9 !important;
-  font-size: 14px;
+  font-weight: 700;
+  color: #a3a3a3 !important;
+  font-size:1.2rem;
   padding: 7px 0 !important;
   display: inline-block;
 }
+.card-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.card-text {
+  font-size: 1.6rem;
+}
+}
+.card-footer {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  padding: 1.2rem 0;
+  @media (max-width: 84em) {font-size:1.7rem;}
+  @media (max-width: 75em) {  font-size:1.6rem;}
+  @media (max-width: 59em) { font-size:1.5rem; }
+  @media (max-width: 44em) {  font-size:1.2rem }
+  @media (max-width: 34em) { font-size:1rem; }
+.btn-edit{
 
-/* App log up and login styles */
+  svg{
+
+    @media (max-width: 84em) {margin: 0;
+      padding: 0;
+      margin: 0;      
+      width: 16px;
+      height: 16px;
+    }
+    @media (max-width: 75em) {
+      margin: 0;
+      padding: 0;
+      width:15px ;
+      height:15px ;
+    }
+    @media (max-width: 59em) {
+      margin: 0;
+      padding: 0;
+      width:14px ;
+      height:14px ;
+    }
+    @media (max-width: 44em) {
+      margin: 0;
+      padding: 0;
+      width: 12px;
+      height:12px ;
+    }
+    @media (max-width: 34em) {
+      margin: 0;
+      padding: 0;
+      width: 10px;
+      height: 10px;
+    }
+  }
+    &:hover {
+      color: $main-color ;
+      border-color: $main-color;
+    }
+  }
+  .btn-comment{
+    font-size: 1.5rem;
+    padding-left: 1.2rem !important;
+    @media (max-width: 84em) {font-size:1.5rem;}
+    @media (max-width: 75em) {  font-size:1.4rem;}
+    @media (max-width: 59em) { font-size:1.2rem; }
+    @media (max-width: 44em) {  font-size:1.2rem }
+    @media (max-width: 34em) { font-size:1rem; }
+    &:hover{
+      color: $main-color !important;
+      border-color: $main-color;    
+      font-weight: bold;
+      border: none;
+    }
+  }
+}
+} 
+
+// start login and signup form
 .log-in,
 .register {
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
-  align-items: center;
   position: relative;
+  overflow: hidden;
+  color: $text-color;
+  max-width:50rem;  
+  flex-direction: column;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
   .title {
-    font-size: 40px;
+    font-size: 4rem;
     font-weight: bold;
-    color: #555555;
+    color: $text-color;
     margin: 80px 0 20px;
   }
-
   label {
-    font-size: 20px;
+    font-size: 2rem;
     align-self: flex-start;
     padding-bottom: 8px;
   }
-
-  .active {
-    width: 500px;
-    padding: 15px;
+  input {
+    width: 50rem;
+    padding: 1rem;
     border-radius: 9px;
-    background-color: lightblue;
+    border: 1px solid lightblue;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  .btn-login {
+    width: 50rem;
+    padding: 1.4rem;
+    border-radius: 9px;
+    background-color: $second-bg-color;
     border: none;
     font-size: 20px;
-    color: #555555;
+    color: $text-color;
     font-weight: bold;
     text-transform: capitalize;
     &:hover {
-      background-color: rgb(135, 213, 239);
+      background-color: $main-color;
     }
   }
-
-  input {
-    width: 500px;
-    padding: 15px;
-    border-radius: 9px;
-    border: 1px solid lightblue;
-    margin-bottom: 20px;
-  }
-
-  .extra {
-    width: 100px;
-    padding: 10px;
+  .btn-signup {
+    width: 10rem;
+    padding: 1rem;
     border-radius: 9px;
     text-decoration: underline;
     border: none;
-    font-size: 15px;
-    color: black;
+    font-size: 1.5rem;
+    color: $text-color;
     font-weight: bold;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 1rem;
     &:hover {
-      background-color: rgba(173, 216, 230, 0.349);
+      background-color:$main-color;
     }
   }
   .home {
+    color: $text-color;
+    font-weight: bold;
     position: absolute;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 2.5rem;
     right: 0;
-    padding: 2px;
-  }
-}
-
-.tags {
-  button {
-    border: none;
-    background-color: grey;
-    padding: 4px 10px;
-    border-radius: 20px;
-    &:hover {
-      background-color: rgba(128, 128, 128, 0.6);
+    padding: 0.2rem;
+    &:hover{
+      color: $main-color;
     }
   }
 }
 
 // add post button
 .add-post-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: $main-color;
+  font-size: 5rem;
+  font-weight: bold;
+  color: $text-color;
+  height: 6rem;
+  width: 6rem;
+  border: none;
   text-decoration: none;
-  font-size: 50px;
-  color: white;
   position: fixed;
   right: 5%;
   bottom: 5%;
-  height: 60px;
-  width: 60px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
-  background-color: $btn-color;
-  border: none;
   box-shadow: 0 9px 9px rgba(0, 0, 0, 0.1);
-  z-index: 9999;
-
+  z-index: 99;
   &:hover {
     background-color: rgb(135, 213, 239);
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
@@ -195,79 +351,87 @@ font-family: "Roboto", sans-serif;
   position: fixed;
   inset: 0;
   background-color: rgb(0, 0, 0, 0.6);
-  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
-
+  z-index: 999;
   .modal-container {
-    width: 50vw;
-    background-color: rgb(255, 255, 255);
+    background-color: $third-bg-color;
+    color: $text-color;
     padding: 1rem;
-    width: 80vw;
-    max-width: 500px;
+    width: 50rem;
     border-radius: 9px;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-  }
-
+    .modal-header {
+      h6 {
+        font-size: 2.2rem;
+      }
+    }
   label {
-    font-size: 20px;
+    font-size: 2rem;
     align-self: flex-start;
     padding-bottom: 8px;
   }
   input,
-  textarea {
+  textarea,.img-container {
     width: 100%;
-    padding: 10px;
+    padding: 1rem;
     border-radius: 9px;
     border: 1px solid lightblue;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    border: 1px solid black;
   }
-
   textarea {
     resize: none;
   }
-
   .close-modal {
     color: #ff0000;
     border-color: #ff0000;
     padding: 5px 10px;
-    font-size: 10px;
+    font-size: 1rem;
     margin-left: auto;
-
     &:hover {
       font-weight: bold;
       color: white;
     }
   }
-
   .create-post {
-    background-color: lightblue;
-    font-size: 18px;
-    padding: 10px;
+    width: 100%;
+    padding: 1.4rem;
     border-radius: 9px;
+    background-color: $second-bg-color;
     border: none;
-    color: #555555;
+    font-size: 20px;
+    color: $text-color;
+    font-weight: bold;
     text-transform: capitalize;
-
     &:hover {
-      background-color: rgb(135, 213, 239);
+      background-color: $main-color;
       font-weight: bold;
     }
   }
 }
+  }
 
 // post modal
 .modal-comment-container {
+  background-color: $third-bg-color !important;
+  color: $text-color !important;
+  z-index: 9999;
   overflow-y: scroll;
   width: 70vw;
   max-width: 80vw;
   max-height: 900px;
   border-radius: 9px;
   overflow: hidden;
-
+.card-header {
+  button {
+    margin-left: auto;
+  }
+}
   .card-body {
     overflow: auto;
     max-height: 700px;
@@ -279,17 +443,23 @@ font-family: "Roboto", sans-serif;
   }
 
   .footer-container {
+    width: 100%;
+    .btn-comment {
+      color: $text-color;
+    }
     .comment-container {
       overflow-y: auto;
       max-height: 60vh;
       padding-bottom: 10px;
+      width: 100%;
       .comment-list {
         list-style: none;
         margin: 0;
         padding: 0;
 
         li {
-          background-color: rgba(192, 192, 192, 0.207);
+          background-color: $text-color;
+          color: black;
           padding: 5px;
           margin: 10px;
           border-radius: 10px;
@@ -317,38 +487,54 @@ font-family: "Roboto", sans-serif;
 
 // createing comments
 .form-box {
+  padding: 1.6rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
   input {
+    width: 100%;
     margin: 0;
   }
-  button {
+  .btn-send {
     text-align: center;
-    padding: 9px 10px;
+    padding: 4px 10px;
+    font-size: 1.8rem;
+    font-weight: bold;
+color: #4BB543;
+border: 1px solid #4BB543;
   }
 }
 
-// posts header
-.card-header {
-  cursor: pointer;
-  .btn-delete {
-    margin-left: auto;
-  }
-}
+
 
 // user info
 .user-info {
-  background-color: #55555515;
+  background-color: $main-color;
+  color: $text-color;
   border-radius: 9px;
   padding: 9px;
-  font-size: 17px;
-  .user-name {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-weight: bold;
+  font-size: 1.7rem;
+    @media (max-width: 84em) {
+    font-size:1.7rem;}
+    @media (max-width: 75em) { 
+    max-width: 150rem;
+    font-size:1.6rem;}
+    @media (max-width: 59em) { 
+    max-width: 110rem;
+    font-size:1.5rem; }
+    @media (max-width: 44em) {  
+    max-width: 100rem;
+    font-size:1.2rem }
+    @media (max-width: 34em) { 
+    max-width: 80rem;
+    font-size:1rem; 
+  }
+    .user-name {
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+     font-weight: bold;
   }
   .user-count {
     display: flex;
@@ -359,5 +545,33 @@ font-family: "Roboto", sans-serif;
       font-size: 20px;
       font-weight: bold;
     }
+  }
+}
+
+// user img 
+.user-img {
+  @media (max-width: 84em) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media (max-width: 75em) {  
+    width: 35px;
+    height: 35px;
+  }
+
+  @media (max-width: 59em) { 
+    width: 30px;
+    height: 30px;
+  }
+
+  @media (max-width: 44em) {  
+    width: 25px;
+    height: 25px;
+  }
+
+  @media (max-width: 34em) { 
+    width: 20px;
+    height: 20px;
   }
 }

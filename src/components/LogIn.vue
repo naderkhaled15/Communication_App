@@ -71,10 +71,10 @@ let login = async () => {
         id="pass"
       />
 
-      <button type="submit" @click.prevent="login" class="active">
+      <button type="submit" @click.prevent="login" class="btn-login">
         Log In
       </button>
-      <RouterLink to="/sign-up" class="extra">Sign Up</RouterLink>
+      <RouterLink to="/sign-up" class="btn-signup">Sign Up</RouterLink>
     </form>
   </div>
 </template>

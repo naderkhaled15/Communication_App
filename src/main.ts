@@ -1,12 +1,12 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.js";
 import "./assets/style.css";
+import App from "./App.vue";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import BootstrapVue3 from "bootstrap-vue-3";
 import mitt from "mitt";
 import router from "./router";
-import App from "./App.vue";
+import BootstrapVue3 from "bootstrap-vue-3";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.js";
 
 
 

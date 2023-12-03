@@ -43,7 +43,7 @@ const addComment = async () => {
 <template>
   <form action="" class="form-box">
     <input type="text" v-model="comment" />
-    <button type="button" class="btn btn-outline-success" @click="addComment">
+    <button type="button" class="btn btn-send" @click="addComment">
       send
     </button>
   </form>
