@@ -61,6 +61,7 @@ body {
     justify-content: center;
     align-items: center;
     .navbar-brand {
+      padding-top: 0 !important;
       color: $text-color;
       font-size: 2.5rem;
       font-weight: bold;      
@@ -70,7 +71,8 @@ body {
       @media (max-width: 44em) {  font-size:1.5rem }
       @media (max-width: 34em) { font-size:1.2rem; }
     span{
-      color: $main-color;
+      // color: $main-color;
+      color:#1085b8;
     }
     }
     .navbar-nav{
@@ -574,4 +576,9 @@ border: 1px solid #4BB543;
     width: 20px;
     height: 20px;
   }
+}
+
+// router active class
+.active {
+  color: $main-color !important
 }

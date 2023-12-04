@@ -80,10 +80,10 @@ px-2 py-2 rounded">
 
         <ul class="navbar-nav mr-auto" >
               <li class="nav-item active">
-                <RouterLink class="nav-link" to="/"> home </RouterLink>
+                <RouterLink class="nav-link" active-class="active" to="/"> home </RouterLink>
               </li>
               <li class="nav-item">
-                <RouterLink v-if="show" class="nav-link" :to="'/profile/'+userCard.id"> profile </RouterLink>
+                <RouterLink v-if="show" active-class="active" class="nav-link" :to="'/profile/'+userCard.id"> profile </RouterLink>
               </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" v-if="show">

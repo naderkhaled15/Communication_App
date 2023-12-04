@@ -79,6 +79,7 @@ body {
           align-items: center;
 }
 .nav-box .navbar .navbar-brand {
+  padding-top: 0 !important;
   color: #ededed;
   font-size: 2.5rem;
   font-weight: bold;
@@ -109,7 +110,7 @@ body {
   }
 }
 .nav-box .navbar .navbar-brand span {
-  color: #00abf0;
+  color: #1085b8;
 }
 .nav-box .navbar .navbar-nav {
   display: -webkit-box;
@@ -795,4 +796,8 @@ body {
     width: 20px;
     height: 20px;
   }
+}
+
+.active {
+  color: #00abf0 !important;
 }

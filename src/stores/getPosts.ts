@@ -3,7 +3,7 @@ import axios from "../axios";
 export const getPosts = defineStore("posts", {
   state: () => ({
     allPosts: [],
-    perPage: 10 as number,
+    perPage: 5 as number,
     currentPage: 1 as number,
     // current user posts
     userPosts: [],
