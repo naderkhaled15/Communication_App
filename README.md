@@ -41,7 +41,7 @@ Application designed to pass information and images from one person to another.
 +  Update Posts
 +  Delete Posts   
 
-2-Comment
+3-Comment
 +  Create
 +  Delete
 
