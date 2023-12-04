@@ -35,16 +35,11 @@ Application designed to pass information and images from one person to another.
 + Register
 + Login
 +  Logout
-+  Update profile
 
 2-Post
 +  Create post
 +  Update Posts
-+  Delete Posts
-
-2-Like
-+ Like Post
-+  DisLike Post      
++  Delete Posts   
 
 2-Comment
 +  Create
